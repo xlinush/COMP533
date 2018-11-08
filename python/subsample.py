@@ -4,7 +4,7 @@ import pandas as pd
 
 # configs
 data_dir = ""
-output_dir = "../output"
+output_dir = "output"
 file_movies = "title.basics.tsv"
 file_akas = "title.akas.tsv"
 file_principals = "title.principals.tsv"

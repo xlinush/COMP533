@@ -4,7 +4,7 @@ import pandas as pd
 
 # configs
 data_dir = ""
-output_dir = "output"
+output_dir = "samples"
 file_movies = "title.basics.tsv"
 file_akas = "title.akas.tsv"
 file_principals = "title.principals.tsv"
@@ -76,7 +76,7 @@ if __name__ == "__main__":
     names = sample_names(movie_ids)
 
     os.mkdir(output_dir)
-    movies.to_csv(output_dir + "/" + file_movies, sep="\t", index=False)
+    movies.to_csv(output_dir + "/" + file_movies, sep="\t", index=True)
     akas.to_csv(output_dir + "/" + file_akas, sep="\t", index=False)
     principals.to_csv(output_dir + "/" + file_principals, sep="\t", index=False)
     ratings.to_csv(output_dir + "/" + file_ratings, sep="\t", index=False)

@@ -1,5 +1,5 @@
+import os
 import sys
-from collections import namedtuple
 import pandas as pd
 
 from movie import clean_movie
@@ -25,14 +25,6 @@ file_relation_person = "person.tsv"
 file_relation_role = "role.tsv"
 file_relation_assign = "assign.tsv"
 
-# table definition
-Movie = namedtuple("Movie", ["movieId", "title", "releaseYear", "isAdult", "runtimeMinutes", "rating", "numVotes"])
-Alias = namedtuple("Alias", ["movieId", "title", "isOriginal", "region"])
-Genre = namedtuple("Genre", ["movieId", "type"])
-Person = namedtuple("Person", ["personId", "name", "birthYear", "deathYear", "age"])
-Role = namedtuple("Role", ["roleId", "type"])
-Assign = namedtuple("Assign", ["movieId", "personId", "roleId"])
-
 
 if __name__ == "__main__":
     data_dir = sys.argv[1]
@@ -43,17 +35,23 @@ if __name__ == "__main__":
     tsv_ratings = pd.read_table(data_dir+"/"+file_ratings, index_col='tconst')
     tsv_names = pd.read_table(data_dir+"/"+file_names, index_col='nconst')
 
-    relation_movie = clean_movie()
-    relation_alias = clean_alias()
-    relation_genre = clean_genre()
-    relation_person = clean_person()
-    relation_role = clean_role()
-    relation_assign = clean_assign()
+    relation_movie = clean_movie(tsv_movies, tsv_ratings)
+    relation_alias = clean_alias(tsv_akas)
+    relation_genre = clean_genre(tsv_movies)
+    relation_person = clean_person(tsv_principals)
+    relation_role = clean_role(tsv_principals)
+    relation_assign = clean_assign(relation_movie, relation_person, relation_role)
 
     os.mkdir(output_dir)
-    relation_movie.to_csv(output_dir + "/" + file_relation_movie, sep="\t", index=True)
-    relation_alias.to_csv(output_dir + "/" + file_relation_alias, sep="\t", index=True)
-    relation_genre.to_csv(output_dir + "/" + file_relation_genre, sep="\t", index=True)
-    relation_person.to_csv(output_dir + "/" + file_relation_person, sep="\t", index=True)
-    relation_role.to_csv(output_dir + "/" + file_relation_role, sep="\t", index=True)
-    relation_assign.to_csv(output_dir + "/" + file_relation_assign, sep="\t", index=True)
+    if relation_movie is not None:
+        relation_movie.to_csv(output_dir + "/" + file_relation_movie, sep="\t")
+    if relation_alias is not None:
+        relation_alias.to_csv(output_dir + "/" + file_relation_alias, sep="\t")
+    if relation_genre is not None:
+        relation_genre.to_csv(output_dir + "/" + file_relation_genre, sep="\t")
+    if relation_person is not None:
+        relation_person.to_csv(output_dir + "/" + file_relation_person, sep="\t")
+    if relation_role is not None:
+        relation_role.to_csv(output_dir + "/" + file_relation_role, sep="\t")
+    if relation_assign is not None:
+        relation_assign.to_csv(output_dir + "/" + file_relation_assign, sep="\t")

@@ -11,11 +11,11 @@ First put the downloaded data with .tsv suffixes into a directory such as *./dat
 **Code organization**
 
     ./python # python files for data sampling and cleaning
-    ./sql # sql files for relation definitions and analysis
+    ./sql # sql files for relation definitions and analyses
 
 ## Data Sample
 
-    python ./python/subsample.py [data_dir] [sample_ratio]
+    python ./python/subsample.py [data_dir] [sample_ratio (0, 1]]
 
 ## Data Clean
 

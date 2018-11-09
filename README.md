@@ -2,7 +2,7 @@
 
 ## Dev Info
 
-**Data Preparation**
+**Data preparation**
 
 https://datasets.imdbws.com/
 

@@ -11,15 +11,15 @@ def clean_movie(tsv_movies, tsv_ratings):
     :param tsv_ratings:
     :return:
     """
-    ratings = tsv_ratings.to_dict(orient='index')
+    ratings = tsv_ratings.set_index("tconst").to_dict(orient='index')
     rows = []
     for row in tsv_movies.itertuples():
         rating = 0.0
         num_votes = 0
-        if row.Index in ratings:
-            rating = ratings[row.Index]['averageRating']
-            num_votes = ratings[row.Index]['numVotes']
-        movie = Movie(movieId=row.Index,
+        if row.tconst in ratings:
+            rating = ratings[row.tconst]['averageRating']
+            num_votes = ratings[row.tconst]['numVotes']
+        movie = Movie(movieId=row.tconst,
                       title=row.primaryTitle,
                       startYear=row.startYear,
                       isAdult=row.isAdult,

@@ -13,7 +13,7 @@ file_names = "name.basics.tsv"
 
 
 def sample_movies(fraction):
-    movies = pd.read_table(data_dir+"/"+file_movies, index_col=0)
+    movies = pd.read_table(data_dir+"/"+file_movies)
     return movies.sample(frac=float(fraction))
 
 
@@ -67,7 +67,7 @@ if __name__ == "__main__":
 
     # Write out movies
     movies = sample_movies(fraction)
-    movie_ids = movies.to_dict(orient="index")
+    movie_ids = movies.set_index("tconst").to_dict(orient="index")
 
     # Write out names
     names = sample_names(movie_ids)
@@ -78,7 +78,7 @@ if __name__ == "__main__":
     ratings = sample_ratings(movie_ids)
 
     os.mkdir(output_dir)
-    movies.to_csv(output_dir + "/" + file_movies, sep="\t", index=True)
+    movies.to_csv(output_dir + "/" + file_movies, sep="\t", index=False)
     names.to_csv(output_dir + "/" + file_names, sep="\t", index=False)
     akas.to_csv(output_dir + "/" + file_akas, sep="\t", index=False)
     principals.to_csv(output_dir + "/" + file_principals, sep="\t", index=False)

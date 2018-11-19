@@ -1,6 +1,8 @@
 from collections import namedtuple
+import panadas as pd
 
-Role = namedtuple("Role", ["roleId", "type"])
+role_columns = ["roleId", "type"]
+Role = namedtuple("Role", role_columns)
 
 
 def clean_role(tsv_principals, tsv_names):
@@ -11,4 +13,13 @@ def clean_role(tsv_principals, tsv_names):
     : Use tsv_names to get primary roles of a person, and union the results
     : with categories in tsv_principals to generate all the roles of the person
     """
-    pass
+    rows = []
+    num = 1
+    distinct = tsv_principals['category'].drop_duplicates()
+    for row in distinct:
+        roleId = 'r'+str(num)
+        role = Role(roleId = roleId,
+                    type = row)
+        rows.append(role._asdict())
+        num += 1    
+    return pd.DataFrame(rows, columns=role_columns)

@@ -2,12 +2,13 @@ from collections import namedtuple
 import pandas as pd
 
 assign_columns = ["movieId", "personId", "roleId"]
-Assign = namedtuple("Assign", ["movieId", "personId", "roleId"])
+Assign = namedtuple("Assign", assign_columns)
 
-def clean_assign(tsv_principals, tsv_role):
+
+def clean_assign(tsv_principals, relation_role):
     """
-    :param tsv_principals
-    :param tsv_role
+    :param tsv_principals: ["tconst", "ordering", "nconst", "category", "job", "characters"], use the category field to match roles
+    :param relation_role: namedtuple("Role", ["roleId", "type"])
     """
     rows = []
     types = np.array(tsv_role['type'])

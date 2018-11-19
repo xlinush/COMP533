@@ -5,9 +5,9 @@ Person = namedtuple("Person", ["personId", "name", "birthYear", "deathYear", "ag
 person_columns = ["personId", "name", "birthYear", "deathYear", "age"]
 
 
-def clean_person(tsv_principals):
+def clean_person(tsv_names):
     """
-    :param tsv_principals:
+    :param tsv_names: ["nconst", "primaryName", "birthYear", "deathYear", "primaryProfession", "knownForTitles"]
     """
     rows = []
     clean_birthYear = np.array(tsv_principals['birthYear'])

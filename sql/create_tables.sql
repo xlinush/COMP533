@@ -11,10 +11,11 @@ CREATE TABLE Movie (
 
 CREATE TABLE Alias (
   movieId CHAR(9),
-  title VARCHAR(100) NOT NULL,
+  title VARCHAR(1000) NOT NULL,  -- some title can be over 500 chars eg. tt0053190
   isOriginal BOOLEAN DEFAULT FALSE,
   region VARCHAR(50),
-  PRIMARY KEY (movieId, isOriginal, region),
+  lang CHAR(3),
+  PRIMARY KEY (movieId, title, isOriginal, region, lang),
   FOREIGN KEY (movieId) REFERENCES Movie(movieId)
 );
 

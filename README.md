@@ -1,5 +1,5 @@
 # COMP533 Final Project
-Zheyu says something
+
 ## Dev Info
 
 **Data preparation**

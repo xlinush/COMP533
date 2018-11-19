@@ -1,4 +1,5 @@
 from collections import namedtuple
+import panadas as pd
 
 role_columns = ["roleId", "type"]
 Role = namedtuple("Role", ["roleId", "type"])
@@ -16,5 +17,5 @@ def clean_role(tsv_principals):
                     type = row)
         
         rows.append(role._asdict())
-        num +=1    
+        num += 1    
     return pd.DataFrame(rows, columns=role_columns)

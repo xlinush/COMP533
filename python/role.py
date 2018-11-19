@@ -1,5 +1,5 @@
 from collections import namedtuple
-import panadas as pd
+import pandas as pd
 
 role_columns = ["roleId", "type"]
 Role = namedtuple("Role", role_columns)

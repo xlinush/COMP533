@@ -54,4 +54,4 @@ if __name__ == "__main__":
     if relation_role is not None:
         relation_role.to_csv(output_dir + "/" + file_relation_role, sep="\t", index=False)
     if relation_assign is not None:
-        relation_assign.to_csv(output_dir + "/" + file_relation_assign, sep="\t")
+        relation_assign.to_csv(output_dir + "/" + file_relation_assign, sep="\t", index=False)

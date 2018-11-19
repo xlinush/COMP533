@@ -1,4 +1,5 @@
 from collections import namedtuple
+import numpy as np
 import pandas as pd
 
 assign_columns = ["movieId", "personId", "roleId"]
@@ -11,7 +12,7 @@ def clean_assign(tsv_principals, relation_role):
     :param relation_role: namedtuple("Role", ["roleId", "type"])
     """
     rows = []
-    types = np.array(tsv_role['type'])
+    types = np.array(relation_role['type'])
     role_dict = {}
     num = 1
     for type in types:

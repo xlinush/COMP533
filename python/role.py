@@ -17,7 +17,7 @@ def clean_role(tsv_principals, tsv_names):
     num = 1
     distinct = tsv_principals['category'].drop_duplicates()
     for row in distinct:
-        roleId = 'r'+str(num)
+        roleId = num
         role = Role(roleId = roleId,
                     type = row)
         rows.append(role._asdict())

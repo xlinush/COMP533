@@ -17,15 +17,12 @@ def sample_movies(fraction):
     return movies.sample(frac=float(fraction))
 
 
-def sample_names(movie_ids):
+def sample_names(name_ids):
     names = pd.read_table(data_dir+"/"+file_names)
     rows = []
     for row in names.itertuples():
-        titles = row.knownForTitles.split(",")
-        for title in titles:
-            if title in movie_ids:
-                rows.append(row._asdict())
-                break
+        if row.nconst in name_ids:
+            rows.append(row._asdict())
     new_names = pd.DataFrame(rows, columns=names.columns)
     return new_names
 
@@ -40,13 +37,12 @@ def sample_akas(movie_ids):
     return new_akas
 
 
-def sample_principals(movie_ids, name_ids):
+def sample_principals(movie_ids):
     principals = pd.read_table(data_dir+"/"+file_principals)
     rows = []
     for row in principals.itertuples():
         if row.tconst in movie_ids:
-            if row.nconst in name_ids:
-                rows.append(row._asdict())
+            rows.append(row._asdict())
     new_pricipals = pd.DataFrame(rows, columns=principals.columns)
     return new_pricipals
 
@@ -65,15 +61,15 @@ if __name__ == "__main__":
     data_dir = sys.argv[1]
     fraction = sys.argv[2]
 
-    # Write out movies
+    # Get movie ids
     movies = sample_movies(fraction)
     movie_ids = movies.set_index("tconst").to_dict(orient="index")
 
-    # Write out names
-    names = sample_names(movie_ids)
-    name_ids = names.set_index("nconst").to_dict(orient="index")
+    # Get name ids
+    principals = sample_principals(movie_ids)
+    name_ids = principals.set_index("nconst").to_dict(orient="index")
 
-    principals = sample_principals(movie_ids, name_ids)
+    names = sample_names(name_ids)
     akas = sample_akas(movie_ids)
     ratings = sample_ratings(movie_ids)
 

@@ -1,5 +1,6 @@
 from collections import namedtuple
 import pandas as pd
+import numpy as np
 
 role_columns = ["roleId", "type"]
 Role = namedtuple("Role", role_columns)
@@ -15,8 +16,20 @@ def clean_role(tsv_principals, tsv_names):
     """
     rows = []
     num = 1
+    professions = []
+    
+    for couple in np.array(tsv_names['primaryProfession']):
+        for profession in str(couple).split(','):
+            professions.append(profession)
+           
     distinct = tsv_principals['category'].drop_duplicates()
-    for row in distinct:
+    
+    for role in distinct:
+        professions.append(role)
+    
+    professions = set(professions)
+    
+    for row in professions:
         roleId = num
         role = Role(roleId = roleId,
                     type = row)

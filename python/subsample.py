@@ -37,12 +37,13 @@ def sample_akas(movie_ids):
     return new_akas
 
 
-def sample_principals(movie_ids):
+def sample_principals(movie_ids, name_ids):
     principals = pd.read_table(data_dir+"/"+file_principals)
     rows = []
     for row in principals.itertuples():
         if row.tconst in movie_ids:
-            rows.append(row._asdict())
+            if row.nconst in name_ids:
+                rows.append(row._asdict())
     new_pricipals = pd.DataFrame(rows, columns=principals.columns)
     return new_pricipals
 
@@ -65,8 +66,11 @@ if __name__ == "__main__":
     movies = sample_movies(fraction)
     movie_ids = movies.set_index("tconst").to_dict(orient="index")
 
-    # Get name ids
-    principals = sample_principals(movie_ids)
+    # Get name ids for all movies
+    name_ids = pd.read_table(data_dir+"/"+file_names).set_index("nconst").to_dict(orient="index")
+    principals = sample_principals(movie_ids, name_ids)
+
+    # Get name ids for all principals
     name_ids = principals.set_index("nconst").to_dict(orient="index")
 
     names = sample_names(name_ids)

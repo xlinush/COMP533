@@ -20,7 +20,7 @@ def clean_alias(tsv_akas):
             continue
 
         # skip non-original rows without specified regions
-        if "\\N" == row.region and row.isOriginalTitle == 0:
+        if "\\N" == row.region:
             continue
 
         # skip rows where region starts with "X"

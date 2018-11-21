@@ -24,4 +24,4 @@ def clean_assign(tsv_principals, relation_role):
                        personId = row.nconst,
                        roleId = roleId)
         rows.append(assign._asdict())
-    return pd.DataFrame(rows, columns=assign_columns)
+    return pd.DataFrame(rows, columns=assign_columns).drop_duplicates()

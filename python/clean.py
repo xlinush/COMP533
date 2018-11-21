@@ -44,14 +44,14 @@ if __name__ == "__main__":
 
     os.mkdir(output_dir)
     if relation_movie is not None:
-        relation_movie.to_csv(output_dir + "/" + file_relation_movie, sep="\t", index=False)
+        relation_movie.to_csv(output_dir + "/" + file_relation_movie, sep="\t", index=False, header=False)
     if relation_alias is not None:
-        relation_alias.to_csv(output_dir + "/" + file_relation_alias, sep="\t", index=False)
+        relation_alias.to_csv(output_dir + "/" + file_relation_alias, sep="\t", index=False, header=False)
     if relation_genre is not None:
-        relation_genre.to_csv(output_dir + "/" + file_relation_genre, sep="\t", index=False)
+        relation_genre.to_csv(output_dir + "/" + file_relation_genre, sep="\t", index=False, header=False)
     if relation_person is not None:
-        relation_person.to_csv(output_dir + "/" + file_relation_person, sep="\t", index=False)
+        relation_person.to_csv(output_dir + "/" + file_relation_person, sep="\t", index=False, header=False)
     if relation_role is not None:
-        relation_role.to_csv(output_dir + "/" + file_relation_role, sep="\t", index=False)
+        relation_role.to_csv(output_dir + "/" + file_relation_role, sep="\t", index=False, header=False)
     if relation_assign is not None:
-        relation_assign.to_csv(output_dir + "/" + file_relation_assign, sep="\t", index=False)
+        relation_assign.to_csv(output_dir + "/" + file_relation_assign, sep="\t", index=False, header=False)

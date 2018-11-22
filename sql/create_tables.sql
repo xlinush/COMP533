@@ -1,5 +1,5 @@
 CREATE TABLE Movie (
-  movieId VARCHAR(10),
+  movieId CHAR(10),
   title VARCHAR(1000) NOT NULL,
   releaseYear INTEGER,
   isAdult BOOLEAN DEFAULT FALSE,

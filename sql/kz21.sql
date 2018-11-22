@@ -6,9 +6,9 @@ BEGIN
 	queryString = 'DROP VIEW IF EXISTS v; CREATE VIEW v AS ';
 	IF rankingType = 'person' THEN
 		queryString = queryString ||
-					  'SELECT p.personid AS id, p.name AS name, p.rating AS rating FROM (
-		               SELECT p.personid, p.name, ROUND(AVG(m.rating), 3) AS rating
-					   FROM person AS p, assign AS a, movie AS m ';
+                              'SELECT p.personid AS id, p.name AS name, p.rating AS rating FROM (
+                               SELECT p.personid, p.name, ROUND(AVG(m.rating), 3) AS rating
+                               FROM person AS p, assign AS a, movie AS m ';
 		IF genreType <> '' THEN
 			queryString = queryString || ', genre AS g ';
 		END IF;
@@ -31,8 +31,8 @@ BEGIN
 		queryString = queryString || 'GROUP BY p.personid) AS p ORDER BY p.rating DESC;';
 	ELSIF rankingType = 'movie' THEN
 		queryString = queryString ||
-					  'SELECT m.movieid AS id, m.title AS name, ROUND(m.rating, 3) AS rating
-					   FROM movie AS m, assign AS a ';
+                              'SELECT m.movieid AS id, m.title AS name, ROUND(m.rating, 3) AS rating
+                               FROM movie AS m, assign AS a ';
 		IF genreType <> '' THEN
 			queryString = queryString || ', genre AS g ';
 		END IF;

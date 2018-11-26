@@ -14,6 +14,8 @@ file_names = "name.basics.tsv"
 
 def sample_movies(fraction):
     movies = pd.read_table(data_dir+"/"+file_movies)
+    movies = movies.query('titleType == "movie" or titleType == "short" or \
+                           titleType == "video" or titleType == "videoGame"')
     return movies.sample(frac=float(fraction))
 
 

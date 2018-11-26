@@ -49,3 +49,11 @@ CREATE TABLE Assign (
   FOREIGN KEY (personId) REFERENCES Person(personId),
   FOREIGN KEY (roleId) REFERENCES Role(roleId)
 );
+
+CREATE TABLE Recommend_Movie(
+  movieid CHAR(10),
+  title VARCHAR(1000),
+  recommend_movie_id CHAR(10),
+  recommend_movie VARCHAR(1000),
+  recommendation_value numeric
+);

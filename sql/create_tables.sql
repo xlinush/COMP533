@@ -57,3 +57,4 @@ CREATE TABLE Recommend_Movie(
   recommend_movie VARCHAR(1000),
   recommendation_value numeric
 );
+

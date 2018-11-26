@@ -15,6 +15,7 @@ def clean_genre(tsv_movies):
         genres = row.genres.split(',')
         for genre in genres:
             if genre != '\\N':
+                genre = genre.replace('-', '_')  # '-' behaves strangely in SQL
                 genre = Genre(movieId=row.tconst, type=genre)
                 rows.append(genre._asdict())
 

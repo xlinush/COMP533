@@ -21,3 +21,7 @@ COPY person
 COPY assign
   FROM '/home/jokeren/Codes/COMP533/COMP533/relations/assign.tsv'
   WITH (DELIMITER E'\t', NULL '');
+
+COPY recommend_movie
+  FROM '/home/jokeren/Codes/COMP533/COMP533/relations/recommend_movie.tsv'
+  WITH (DELIMITER E'\t', NULL '');

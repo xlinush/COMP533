@@ -277,10 +277,10 @@ from similarity s, movie m
 where s.id_2=m.movieid
 order by s.id_1, recommendation_value desc
 																						
-create table recommend_movie as																								
+create table recommend_movie as																						
 select movie_id, m.title, rm.recommend_movie_id, rm.recommend_movie, rm.recommendation_value
 from recommend_movie_previous rm, movie m																					
-where rm.movie_id = m.movieid																						
+where rm.movie_id = m.movieid and rm.recommendation_value >	5.5																					
 order by rm.movie_id, recommendation_value desc	
 																						
 																					

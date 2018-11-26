@@ -55,24 +55,17 @@ create or replace function fillTop15Genres(yearInterval integer)
 returns void as
 $$
 declare
-  genreTypes    varchar[];
   movieCursor   refcursor;
   movieRecord   record;
   selectQuery   text;
   updateQuery   text;
   currentYear   integer;
-  currentPeriod varchar(20) default "";
+  currentPeriod varchar(20) default '';
+  movieType     varchar;
 begin
-  select into genreTypes
-  from information_schema.columns
-  where table_name = 'top15genres';
-
   selectQuery = 'select * from movie as m, genre as g
                  where m.movieId = g.movieId
                  order by m.releaseyear asc';
-  updateQuery = 'insert into top15genres (timespan, $1)
-                 values ($2, 1) on conflict (timespan)
-                 do update set $1 = top15genres.$1 + 1';
   open movieCursor for execute selectQuery;
   loop
     fetch movieCursor into movieRecord;
@@ -81,19 +74,46 @@ begin
     currentYear = movieRecord.releaseyear;
 
     /* skip unwanded time spans and genres */
-    if （currentYear < 1901 or currentYear > 2018 or movieRecord.type != all(genreTypes)) then
+    if (currentYear is null
+        or (currentYear < 1901)
+        or (currentYear > 2018)
+        or (select movieRecord.type not ilike all (
+          select column_name from information_schema.columns where table_name = 'top15genres'
+        ))) then
       continue;
     end if;
     if (currentYear < 2020 - yearInterval) then
       currentPeriod = quote_literal(currentYear - currentYear % yearInterval + 1)
                       || ' ~ ' ||
-                      quote_literal（currentYear - currentYear % yearInterval + yearInterval);
+                      quote_literal(currentYear - currentYear % yearInterval + yearInterval);
     else
       currentPeriod = quote_literal(2020 - yearInterval + 1) || ' ~ present';
     end if;
-    execute updateQuery using quote_literal(movieRecord.type), currentPeriod;
+    movieType = movieRecord.type;
+    updateQuery = 'insert into top15genres (timespan, '
+                  || movieType
+                  || ') values ($1, 1) on conflict(timespan) do update set '
+                  || movieType
+                  || ' = top15genres.'
+                  || movieType
+                  || ' + 1';
+    if (updateQuery is not null) then
+      execute updateQuery using currentPeriod;
+    else
+      raise notice 'rawType = %, currentPeriod = %', movieRecord.type, currentPeriod;
+    end if;
   end loop;
 
 end;
 $$
 language plpgsql;
+
+/* Test Cases
+
+select fillTop15Genres(10);
+select * from top15genres;
+
+select fillTop15Genres(20);
+select * from top15genres;
+
+*/

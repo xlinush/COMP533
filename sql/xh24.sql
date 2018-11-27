@@ -142,10 +142,10 @@ returns numeric as
 $$
 declare
   runtimeCursor refcursor;
-  selectQuery text;
-  curMinutes integer := 0;
-  sumMinutes integer := 0;
-  numMovies integer := 0;
+  selectQuery   text;
+  curMinutes    integer := 0;
+  sumMinutes    integer := 0;
+  numMovies     integer := 0;
 begin
   selectQuery = 'select runtimeminutes
                 from movie m , nonShortMovies nsm

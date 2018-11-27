@@ -117,3 +117,60 @@ select fillTop15Genres(20);
 select * from top15genres;
 
 */
+
+
+/*
+ * 2. Average running minutes of movies through decades.
+ */
+
+/* Firstly, create a view that represent non-short movies */
+create or replace view nonShortMovies as
+select distinct(movieId)
+from genre g1
+where 'Short' not in (
+    select type
+    from genre g2
+    where g1.movieId = g2.movieId
+);
+
+/* Then, we need to have function to compute tbe average length of movies in a period */
+/*
+ * startYear and endYear are both include when a movie is being searched.
+ */
+create or replace function avgMovieLengthBetween (startYear integer, endYear integer)
+returns numeric as
+$$
+declare
+  runtimeCursor refcursor;
+  selectQuery text;
+  curMinutes integer := 0;
+  sumMinutes integer := 0;
+  numMovies integer := 0;
+begin
+  selectQuery = 'select runtimeminutes
+                from movie m , nonShortMovies nsm
+                where m.movieId = nsm.movieId
+                  and m.runtimeminutes is not null
+                  and m.releaseyear >= $1
+                  and m.releaseyear <= $2';
+  open runtimeCursor for execute selectQuery using startYear, endYear;
+  loop
+    fetch runtimeCursor into curMinutes;
+    exit when not found;
+    sumMinutes = curMinutes + sumMinutes;
+    numMovies = numMovies + 1;
+  end loop;
+  close runtimeCursor;
+
+  return cast(sumMinutes::numeric / numMovies as numeric(4,1));
+end;
+$$
+language plpgsql;
+
+/* Test cases
+
+select avgMovieLengthBetween(1921, 1930); -- 73.4
+select avgMovieLengthBetween(1941, 1950); -- 77.4
+select avgMovieLengthBetween(1981, 1990); -- 88.7
+
+*/

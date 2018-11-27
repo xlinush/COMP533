@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION multiScaleRanking(rankingType VARCHAR(10), genreType VARCHAR(50), roleType VARCHAR(50), region VARCHAR(50)) RETURNS
+CREATE OR REPLACE FUNCTION multiScaleRanking(rankingType VARCHAR(10), genreType VARCHAR(50), roleType VARCHAR(50), region VARCHAR(50), year INTEGER) RETURNS
 TABLE (id CHAR(10), name VARCHAR(1000), rating numeric) AS $$
 DECLARE
 	queryString TEXT;
@@ -19,6 +19,9 @@ BEGIN
 			queryString = queryString || ', alias AS al ';
 		END IF;
 		queryString = queryString || 'WHERE p.personid = a.personid AND m.movieid = a.movieid ';
+    IF year <> 0 THEN
+      queryString = queryString || 'AND m.releaseyear = ' || QUOTE_LITERAL(year) || ' ';
+    END IF;
 		IF genreType <> '' THEN
 			queryString = queryString || 'AND g.movieid = a.movieid AND g.type = ' || QUOTE_LITERAL(genreType) || ' ';
 		END IF;
@@ -31,7 +34,8 @@ BEGIN
 		queryString = queryString || 'GROUP BY p.personid) AS p ORDER BY p.rating DESC;';
 	ELSIF rankingType = 'movie' THEN
 		queryString = queryString ||
-                              'SELECT m.movieid AS id, m.title AS name, ROUND(m.rating, 3) AS rating
+                              'SELECT * FROM (
+			       SELECT DISTINCT ON (m.movieid) m.movieid AS id, m.title AS name, ROUND(m.rating, 3) AS rating
                                FROM movie AS m, assign AS a ';
 		IF genreType <> '' THEN
 			queryString = queryString || ', genre AS g ';
@@ -40,13 +44,16 @@ BEGIN
 			queryString = queryString || ', alias AS al ';
 		END IF;
 		queryString = queryString || 'WHERE m.movieid = a.movieid ';
+    IF year <> 0 THEN
+      queryString = queryString || 'AND m.releaseyear = ' || QUOTE_LITERAL(year) || ' ';
+    END IF;
 		IF genreType <> '' THEN
 			queryString = queryString || 'AND g.movieid = a.movieid AND g.type = ' || QUOTE_LITERAL(genreType) || ' ';
 		END IF;
 		IF region <> '' THEN
 			queryString = queryString || 'AND al.movieid = a.movieid AND al.region = ' || QUOTE_LITERAL(region) || ' ';
 		END IF;
-		queryString = queryString || 'ORDER BY m.rating DESC;';
+		queryString = queryString || ') AS m ORDER BY m.rating DESC;';
 	ELSE
 		RAISE EXCEPTION 'Unsupported rankingType-->%', rankingType;
 	END IF;
